@@ -28,12 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.singin = new System.Windows.Forms.Button();
             this.UserName = new System.Windows.Forms.TextBox();
             this.Password = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.errorProviderError = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProviderWarning = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProviderOk = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderError)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderWarning)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderOk)).BeginInit();
             this.SuspendLayout();
             // 
             // singin
@@ -54,6 +61,8 @@
             this.UserName.Name = "UserName";
             this.UserName.Size = new System.Drawing.Size(215, 23);
             this.UserName.TabIndex = 1;
+            this.UserName.TextChanged += new System.EventHandler(this.UserName_TextChanged);
+            this.UserName.Validating += new System.ComponentModel.CancelEventHandler(this.UserName_Validating);
             // 
             // Password
             // 
@@ -62,6 +71,8 @@
             this.Password.Name = "Password";
             this.Password.Size = new System.Drawing.Size(215, 23);
             this.Password.TabIndex = 2;
+            this.Password.TextChanged += new System.EventHandler(this.Password_TextChanged);
+            this.Password.Validating += new System.ComponentModel.CancelEventHandler(this.Password_Validating);
             // 
             // label1
             // 
@@ -93,6 +104,18 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Парола";
             // 
+            // errorProviderError
+            // 
+            this.errorProviderError.ContainerControl = this;
+            // 
+            // errorProviderWarning
+            // 
+            this.errorProviderWarning.ContainerControl = this;
+            // 
+            // errorProviderOk
+            // 
+            this.errorProviderOk.ContainerControl = this;
+            // 
             // SignInSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -107,6 +130,9 @@
             this.Name = "SignInSystem";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Вход в системата";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderError)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderWarning)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderOk)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -120,6 +146,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ErrorProvider errorProviderError;
+        private System.Windows.Forms.ErrorProvider errorProviderWarning;
+        private System.Windows.Forms.ErrorProvider errorProviderOk;
     }
 }
 

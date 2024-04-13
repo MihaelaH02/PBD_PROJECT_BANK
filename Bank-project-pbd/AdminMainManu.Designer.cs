@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminMainManu));
             this.menuStripAdmin = new System.Windows.Forms.MenuStrip();
             this.AddEmployeeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,12 +64,14 @@
             this.FindEmployeeByNameButton = new System.Windows.Forms.Button();
             this.SearchEmployeeButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.errorProviderError = new System.Windows.Forms.ErrorProvider(this.components);
             this.menuStripAdmin.SuspendLayout();
             this.AddNewEmployeePanel.SuspendLayout();
             this.ProfileDataEmployeeAdd.SuspendLayout();
             this.groupBoxEmployeeDataAdd.SuspendLayout();
             this.FindEmployeePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SearchImageFindEmployee)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderError)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStripAdmin
@@ -121,6 +124,7 @@
             // AddNewEmployeePanel
             // 
             this.AddNewEmployeePanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.AddNewEmployeePanel.Controls.Add(this.FindEmployeePanel);
             this.AddNewEmployeePanel.Controls.Add(this.CancelAddEmployeeButton);
             this.AddNewEmployeePanel.Controls.Add(this.TitleEmployeeInfoButton);
             this.AddNewEmployeePanel.Controls.Add(this.ProfileDataEmployeeAdd);
@@ -218,6 +222,7 @@
             this.PasswordEmployeeAddTextBox.Name = "PasswordEmployeeAddTextBox";
             this.PasswordEmployeeAddTextBox.Size = new System.Drawing.Size(269, 29);
             this.PasswordEmployeeAddTextBox.TabIndex = 4;
+            this.PasswordEmployeeAddTextBox.TextChanged += new System.EventHandler(this.PasswordEmployeeAddTextBox_TextChanged);
             // 
             // UsernameEmployeeAddTextBox
             // 
@@ -226,6 +231,7 @@
             this.UsernameEmployeeAddTextBox.Name = "UsernameEmployeeAddTextBox";
             this.UsernameEmployeeAddTextBox.Size = new System.Drawing.Size(269, 29);
             this.UsernameEmployeeAddTextBox.TabIndex = 3;
+            this.UsernameEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.UsernameEmployeeAddTextBox_Validating);
             // 
             // groupBoxEmployeeDataAdd
             // 
@@ -293,6 +299,7 @@
             this.PositionEmployeeAddComboBox.Name = "PositionEmployeeAddComboBox";
             this.PositionEmployeeAddComboBox.Size = new System.Drawing.Size(288, 23);
             this.PositionEmployeeAddComboBox.TabIndex = 5;
+            this.PositionEmployeeAddComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.PositionEmployeeAddComboBox_Validating);
             // 
             // PhoneEmployeeAddTextBox
             // 
@@ -301,6 +308,7 @@
             this.PhoneEmployeeAddTextBox.Name = "PhoneEmployeeAddTextBox";
             this.PhoneEmployeeAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.PhoneEmployeeAddTextBox.TabIndex = 2;
+            this.PhoneEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PhoneEmployeeAddTextBox_Validating);
             // 
             // NameEmployeeAddTextBox
             // 
@@ -309,6 +317,8 @@
             this.NameEmployeeAddTextBox.Name = "NameEmployeeAddTextBox";
             this.NameEmployeeAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.NameEmployeeAddTextBox.TabIndex = 1;
+            this.NameEmployeeAddTextBox.TextChanged += new System.EventHandler(this.NameEmployeeAddTextBox_TextChanged);
+            this.NameEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.NameEmployeeAddTextBox_Validating);
             // 
             // TitlePanelAddEmployee
             // 
@@ -345,7 +355,7 @@
             this.FindEmployeePanel.Controls.Add(this.FindEmployeeByNameButton);
             this.FindEmployeePanel.Controls.Add(this.SearchEmployeeButton);
             this.FindEmployeePanel.Controls.Add(this.label7);
-            this.FindEmployeePanel.Location = new System.Drawing.Point(23, 45);
+            this.FindEmployeePanel.Location = new System.Drawing.Point(292, 3);
             this.FindEmployeePanel.Name = "FindEmployeePanel";
             this.FindEmployeePanel.Size = new System.Drawing.Size(776, 443);
             this.FindEmployeePanel.TabIndex = 6;
@@ -365,11 +375,12 @@
             "Специалист в одел Банкиране на дребно",
             "Управител",
             "Хигиенист"});
-            this.FindEmployeeByPositionComboBox.Location = new System.Drawing.Point(131, 143);
+            this.FindEmployeeByPositionComboBox.Location = new System.Drawing.Point(131, 170);
             this.FindEmployeeByPositionComboBox.Name = "FindEmployeeByPositionComboBox";
             this.FindEmployeeByPositionComboBox.Size = new System.Drawing.Size(444, 24);
             this.FindEmployeeByPositionComboBox.TabIndex = 13;
             this.FindEmployeeByPositionComboBox.Visible = false;
+            this.FindEmployeeByPositionComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.FindEmployeeByPositionComboBox_Validating);
             // 
             // ResultsFindEmployeeTable
             // 
@@ -406,6 +417,7 @@
             this.SearchEmployeeTextBox.Size = new System.Drawing.Size(447, 26);
             this.SearchEmployeeTextBox.TabIndex = 10;
             this.SearchEmployeeTextBox.Visible = false;
+            this.SearchEmployeeTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SearchEmployeeTextBox_Validating);
             // 
             // FindEmployeeByPositionButton
             // 
@@ -461,13 +473,16 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Търси служител";
             // 
+            // errorProviderError
+            // 
+            this.errorProviderError.ContainerControl = this;
+            // 
             // AdminMainManu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(837, 500);
-            this.Controls.Add(this.FindEmployeePanel);
             this.Controls.Add(this.menuStripAdmin);
             this.Controls.Add(this.AddNewEmployeePanel);
             this.Controls.Add(this.HelloLabel);
@@ -487,6 +502,7 @@
             this.FindEmployeePanel.ResumeLayout(false);
             this.FindEmployeePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SearchImageFindEmployee)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderError)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -528,5 +544,6 @@
         private System.Windows.Forms.TableLayoutPanel ResultsFindEmployeeTable;
         private System.Windows.Forms.Label TitleEmployeeInfoLabel;
         private System.Windows.Forms.ComboBox FindEmployeeByPositionComboBox;
+        private System.Windows.Forms.ErrorProvider errorProviderError;
     }
 }

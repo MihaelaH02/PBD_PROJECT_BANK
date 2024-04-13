@@ -61,8 +61,44 @@ namespace Bank_project_pbd
             }
             else
             {
-                //error provider
+                errorProviderError.SetError(UserName, "Невалидни данни!");
+                errorProviderError.SetError(Password, "Невалидни данни!");
             }
+        }
+
+        private void UserName_Validating(object sender, CancelEventArgs e)
+        {
+            if (UserName.Text == string.Empty)
+            {
+                errorProviderError.SetError(UserName, "Въведете потребителско име!");
+            }
+            else
+            {
+                errorProviderError.SetError(UserName, "");
+            }
+
+        }
+
+        private void Password_Validating(object sender, CancelEventArgs e)
+        {
+            if (Password.Text == string.Empty)
+            {
+                errorProviderError.SetError(Password, "Въведете парола!");
+            }
+            else
+            {
+                errorProviderError.SetError(Password, "");
+            }
+        }
+
+        private void UserName_TextChanged(object sender, EventArgs e)
+        {
+            errorProviderError.SetError(UserName, String.Empty);
+        }
+
+        private void Password_TextChanged(object sender, EventArgs e)
+        {
+            errorProviderError.SetError(Password, String.Empty);
         }
     }
 }

@@ -40,83 +40,94 @@ namespace Bank_project_pbd
 
         private void TtitleEmployeeInfoButton_Click(object sender, EventArgs e)
         {
-            if(TitleEmployeeInfoButton.Text.Equals("Добави служител"))
+            bool hasError = false;
+            foreach (Control control in Controls)
+                if (errorProviderError.GetError(control) != String.Empty) hasError = true;
+
+            if (hasError)
             {
-                OracleCommand commandAddProfile = new OracleCommand("insert_system_profile", con);
-                commandAddProfile.CommandType = CommandType.StoredProcedure;
-                commandAddProfile.Parameters.Add("p_username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
-                commandAddProfile.Parameters.Add("p_password_profile", OracleDbType.Varchar2).Value = PasswordEmployeeAddTextBox.Text;
-                commandAddProfile.Parameters.Add("p_id_role_type", OracleDbType.Int32).Value = 2;
-                commandAddProfile.Parameters.Add("p_id_employee", OracleDbType.Int32).Value = null;
-                commandAddProfile.Parameters.Add("p_id_client", OracleDbType.Int32).Value = null;
-                commandAddProfile.ExecuteNonQuery();
-
-                int newIdProfile = Convert.ToInt32(new OracleCommand("SELECT MAX(id_profile) FROM system_profile", con).ExecuteScalar());
-
-                OracleCommand commandAddEmployee = new OracleCommand("EMPLOYEE_INS", con);
-                commandAddEmployee.CommandType = CommandType.StoredProcedure;
-                commandAddEmployee.Parameters.Add("v_pos_name_emp", OracleDbType.Varchar2).Value = NameEmployeeAddTextBox.Text;
-                commandAddEmployee.Parameters.Add("v_pos_phone_emp", OracleDbType.Varchar2).Value = PhoneEmployeeAddTextBox.Text;
-                commandAddEmployee.Parameters.Add("v_pos_position_emp", OracleDbType.Int32).Value = PositionEmployeeAddComboBox.SelectedIndex + 1;
-                commandAddEmployee.Parameters.Add("v_pos_profile_emp", OracleDbType.Int32).Value = newIdProfile;
-                commandAddEmployee.ExecuteNonQuery();
-
-                int newIdEmployee = Convert.ToInt32(new OracleCommand("SELECT MAX(id_employee) FROM employee", con).ExecuteScalar());
-                OracleCommand commandAddEmployeeToProfiles = con.CreateCommand();
-                String sql = "UPDATE system_profile SET id_employee = :id_employee WHERE id_profile = :id_profile";
-                commandAddEmployeeToProfiles.Parameters.Add("id_profile", OracleDbType.Int32).Value = newIdProfile;
-                commandAddEmployeeToProfiles.Parameters.Add("id_employee", OracleDbType.Int32).Value = newIdEmployee;
-                commandAddEmployeeToProfiles.CommandText = sql;
-                commandAddEmployeeToProfiles.ExecuteNonQuery();
-
-                DialogResult result = MessageBox.Show("Успешно добавен служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (result == DialogResult.OK)
+                if (TitleEmployeeInfoButton.Text.Equals("Добави служител"))
                 {
-                    AddNewEmployeePanel.Controls.Clear();
-                    AddNewEmployeePanel.Visible = false;
+                    OracleCommand commandAddProfile = new OracleCommand("insert_system_profile", con);
+                    commandAddProfile.CommandType = CommandType.StoredProcedure;
+                    commandAddProfile.Parameters.Add("p_username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
+                    commandAddProfile.Parameters.Add("p_password_profile", OracleDbType.Varchar2).Value = PasswordEmployeeAddTextBox.Text;
+                    commandAddProfile.Parameters.Add("p_id_role_type", OracleDbType.Int32).Value = 2;
+                    commandAddProfile.Parameters.Add("p_id_employee", OracleDbType.Int32).Value = null;
+                    commandAddProfile.Parameters.Add("p_id_client", OracleDbType.Int32).Value = null;
+                    commandAddProfile.ExecuteNonQuery();
+
+                    int newIdProfile = Convert.ToInt32(new OracleCommand("SELECT MAX(id_profile) FROM system_profile", con).ExecuteScalar());
+
+                    OracleCommand commandAddEmployee = new OracleCommand("EMPLOYEE_INS", con);
+                    commandAddEmployee.CommandType = CommandType.StoredProcedure;
+                    commandAddEmployee.Parameters.Add("v_pos_name_emp", OracleDbType.Varchar2).Value = NameEmployeeAddTextBox.Text;
+                    commandAddEmployee.Parameters.Add("v_pos_phone_emp", OracleDbType.Varchar2).Value = PhoneEmployeeAddTextBox.Text;
+                    commandAddEmployee.Parameters.Add("v_pos_position_emp", OracleDbType.Int32).Value = PositionEmployeeAddComboBox.SelectedIndex + 1;
+                    commandAddEmployee.Parameters.Add("v_pos_profile_emp", OracleDbType.Int32).Value = newIdProfile;
+                    commandAddEmployee.ExecuteNonQuery();
+
+                    int newIdEmployee = Convert.ToInt32(new OracleCommand("SELECT MAX(id_employee) FROM employee", con).ExecuteScalar());
+                    OracleCommand commandAddEmployeeToProfiles = con.CreateCommand();
+                    String sql = "UPDATE system_profile SET id_employee = :id_employee WHERE id_profile = :id_profile";
+                    commandAddEmployeeToProfiles.Parameters.Add("id_profile", OracleDbType.Int32).Value = newIdProfile;
+                    commandAddEmployeeToProfiles.Parameters.Add("id_employee", OracleDbType.Int32).Value = newIdEmployee;
+                    commandAddEmployeeToProfiles.CommandText = sql;
+                    commandAddEmployeeToProfiles.ExecuteNonQuery();
+
+                    DialogResult result = MessageBox.Show("Успешно добавен служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (result == DialogResult.OK)
+                    {
+                        AddNewEmployeePanel.Controls.Clear();
+                        AddNewEmployeePanel.Visible = false;
+                    }
                 }
-            }
-            else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител")){
-                ArrayList tags = (ArrayList)AddNewEmployeePanel.Tag;
-                int id_employee = (int)tags[0];
-                int id_profile = (int)tags[1];
-
-                OracleCommand commandAddProfile = new OracleCommand("update_system_profile", con);
-                commandAddProfile.CommandType = CommandType.StoredProcedure;
-                commandAddProfile.Parameters.Add("p_id_profile", OracleDbType.Int32).Value = id_profile;
-                commandAddProfile.Parameters.Add("p_username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
-                commandAddProfile.Parameters.Add("p_password_profile", OracleDbType.Varchar2).Value = PasswordEmployeeAddTextBox.Text;
-                commandAddProfile.Parameters.Add("p_id_role_type", OracleDbType.Int32).Value = 1;
-                commandAddProfile.Parameters.Add("p_id_employee", OracleDbType.Int32).Value = id_employee;
-                commandAddProfile.Parameters.Add("p_id_client", OracleDbType.Int32).Value = null;
-                commandAddProfile.ExecuteNonQuery();
-
-                OracleCommand commandAddEmployee = new OracleCommand("EMPLOYEE_UPD", con);
-                commandAddEmployee.CommandType = CommandType.StoredProcedure;
-                commandAddEmployee.Parameters.Add("p_pos_id_employee", OracleDbType.Int32).Value = id_employee;
-                commandAddEmployee.Parameters.Add("v_pos_name_emp", OracleDbType.Varchar2).Value = NameEmployeeAddTextBox.Text;
-                commandAddEmployee.Parameters.Add("v_pos_phone_emp", OracleDbType.Varchar2).Value = PhoneEmployeeAddTextBox.Text;
-                commandAddEmployee.Parameters.Add("v_pos_position_emp", OracleDbType.Int32).Value = PositionEmployeeAddComboBox.SelectedIndex + 1;
-                commandAddEmployee.Parameters.Add("v_pos_profile_emp", OracleDbType.Int32).Value = id_profile;
-                commandAddEmployee.ExecuteNonQuery();
-
-                DialogResult result = MessageBox.Show("Успешно редактиран служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (result == DialogResult.OK)
+                else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител"))
                 {
-                    AddNewEmployeePanel.Controls.Clear();
-                    AddNewEmployeePanel.Visible = false;
-                }
-                AddNewEmployeePanel.Tag = null;
-            }
-            
+                    ArrayList tags = (ArrayList)AddNewEmployeePanel.Tag;
+                    int id_employee = (int)tags[0];
+                    int id_profile = (int)tags[1];
 
+                    OracleCommand commandAddProfile = new OracleCommand("update_system_profile", con);
+                    commandAddProfile.CommandType = CommandType.StoredProcedure;
+                    commandAddProfile.Parameters.Add("p_id_profile", OracleDbType.Int32).Value = id_profile;
+                    commandAddProfile.Parameters.Add("p_username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
+                    commandAddProfile.Parameters.Add("p_password_profile", OracleDbType.Varchar2).Value = PasswordEmployeeAddTextBox.Text;
+                    commandAddProfile.Parameters.Add("p_id_role_type", OracleDbType.Int32).Value = 1;
+                    commandAddProfile.Parameters.Add("p_id_employee", OracleDbType.Int32).Value = id_employee;
+                    commandAddProfile.Parameters.Add("p_id_client", OracleDbType.Int32).Value = null;
+                    commandAddProfile.ExecuteNonQuery();
+
+                    OracleCommand commandAddEmployee = new OracleCommand("EMPLOYEE_UPD", con);
+                    commandAddEmployee.CommandType = CommandType.StoredProcedure;
+                    commandAddEmployee.Parameters.Add("p_pos_id_employee", OracleDbType.Int32).Value = id_employee;
+                    commandAddEmployee.Parameters.Add("v_pos_name_emp", OracleDbType.Varchar2).Value = NameEmployeeAddTextBox.Text;
+                    commandAddEmployee.Parameters.Add("v_pos_phone_emp", OracleDbType.Varchar2).Value = PhoneEmployeeAddTextBox.Text;
+                    commandAddEmployee.Parameters.Add("v_pos_position_emp", OracleDbType.Int32).Value = PositionEmployeeAddComboBox.SelectedIndex + 1;
+                    commandAddEmployee.Parameters.Add("v_pos_profile_emp", OracleDbType.Int32).Value = id_profile;
+                    commandAddEmployee.ExecuteNonQuery();
+
+                    DialogResult result = MessageBox.Show("Успешно редактиран служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (result == DialogResult.OK)
+                    {
+                        AddNewEmployeePanel.Controls.Clear();
+                        AddNewEmployeePanel.Visible = false;
+                    }
+                    AddNewEmployeePanel.Tag = null;
+                }
+            }        
         }
 
         private void CancelAddEmployeeButton_Click(object sender, EventArgs e)
         {
             AddNewEmployeePanel.Visible = false;
-            AddNewEmployeePanel.Controls.Clear();
-
+            foreach (Control control in Controls)
+            {
+                if (control is TextBox)
+                    ((TextBox)control).Clear();
+                else if (control is ComboBox)
+                    ((ComboBox)control).SelectedIndex = -1;
+            }
         }
 
         private void FindEmployeeMenu_Click(object sender, EventArgs e)
@@ -265,7 +276,7 @@ namespace Bank_project_pbd
                 int passwordEmployeeIndex = reader.GetOrdinal("PASSWORD_PROFILE");
                 int idEmployee = reader.GetOrdinal("id_employee");
                 int idProfile = reader.GetOrdinal("id_profile");
-                
+
                 NameEmployeeAddTextBox.Text = reader.GetString(nameEmployeeIndex);
                 PhoneEmployeeAddTextBox.Text = reader.GetString(phoneEmployeeIndex);
                 PositionEmployeeAddComboBox.SelectedIndex = positionEmployeeIndex;
@@ -277,8 +288,8 @@ namespace Bank_project_pbd
                 TitleEmployeeInfoButton.Text = "Редактирай служител";
                 AddNewEmployeePanel.Visible = true;
                 AddNewEmployeePanel.BringToFront();
-                AddNewEmployeePanel.Tag = new ArrayList(){(int)reader.GetDecimal(idEmployee), (int)reader.GetDecimal(idProfile) };
-     
+                AddNewEmployeePanel.Tag = new ArrayList() { (int)reader.GetDecimal(idEmployee), (int)reader.GetDecimal(idProfile) };
+
             }
         }
 
@@ -339,6 +350,74 @@ namespace Bank_project_pbd
         private void AdminMainManu_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void NameEmployeeAddTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (NameEmployeeAddTextBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(NameEmployeeAddTextBox, "Въведете име и фамилия!");
+            }            
+        }
+
+        private void PhoneEmployeeAddTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (PhoneEmployeeAddTextBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(PhoneEmployeeAddTextBox, "Въведете телефонен номер!");
+            }
+        }
+
+        private void PositionEmployeeAddComboBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (PositionEmployeeAddComboBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(PositionEmployeeAddComboBox, "Изберете позиция!");
+            }
+        }
+
+        private void UsernameEmployeeAddTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (UsernameEmployeeAddTextBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(UsernameEmployeeAddTextBox, "Въведете потребителско име!");
+            }
+        }
+
+        private void PasswordEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (PasswordEmployeeAddTextBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(PasswordEmployeeAddTextBox, "Въведете парола!");
+            }
+        }
+
+        private void NameEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
+        {
+            foreach (char letter in NameEmployeeAddTextBox.Text)
+            {
+                if (!char.IsLetter(letter))
+                {
+                    errorProviderError.SetError(PasswordEmployeeAddTextBox, "Невалидни данни!");
+                }
+            }
+            errorProviderError.SetError(PasswordEmployeeAddTextBox, String.Empty);
+        }
+
+        private void FindEmployeeByPositionComboBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (FindEmployeeByPositionComboBox.SelectedIndex == -1)
+            {
+                errorProviderError.SetError(FindEmployeeByPositionComboBox, "Изберете позиция за търсене!");
+            }
+        }
+
+        private void SearchEmployeeTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (SearchEmployeeTextBox.Text == string.Empty)
+            {
+                errorProviderError.SetError(SearchEmployeeTextBox, "Въведете данни за търсене!");
+            }
         }
     }   
 }
