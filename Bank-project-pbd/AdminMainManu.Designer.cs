@@ -124,7 +124,6 @@
             // AddNewEmployeePanel
             // 
             this.AddNewEmployeePanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AddNewEmployeePanel.Controls.Add(this.FindEmployeePanel);
             this.AddNewEmployeePanel.Controls.Add(this.CancelAddEmployeeButton);
             this.AddNewEmployeePanel.Controls.Add(this.TitleEmployeeInfoButton);
             this.AddNewEmployeePanel.Controls.Add(this.ProfileDataEmployeeAdd);
@@ -231,6 +230,7 @@
             this.UsernameEmployeeAddTextBox.Name = "UsernameEmployeeAddTextBox";
             this.UsernameEmployeeAddTextBox.Size = new System.Drawing.Size(269, 29);
             this.UsernameEmployeeAddTextBox.TabIndex = 3;
+            this.UsernameEmployeeAddTextBox.TextChanged += new System.EventHandler(this.UsernameEmployeeAddTextBox_TextChanged);
             this.UsernameEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.UsernameEmployeeAddTextBox_Validating);
             // 
             // groupBoxEmployeeDataAdd
@@ -308,6 +308,8 @@
             this.PhoneEmployeeAddTextBox.Name = "PhoneEmployeeAddTextBox";
             this.PhoneEmployeeAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.PhoneEmployeeAddTextBox.TabIndex = 2;
+            this.PhoneEmployeeAddTextBox.TextChanged += new System.EventHandler(this.PhoneEmployeeAddTextBox_TextChanged);
+            this.PhoneEmployeeAddTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PhoneEmployeeAddTextBox_KeyPress);
             this.PhoneEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PhoneEmployeeAddTextBox_Validating);
             // 
             // NameEmployeeAddTextBox
@@ -317,7 +319,7 @@
             this.NameEmployeeAddTextBox.Name = "NameEmployeeAddTextBox";
             this.NameEmployeeAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.NameEmployeeAddTextBox.TabIndex = 1;
-            this.NameEmployeeAddTextBox.TextChanged += new System.EventHandler(this.NameEmployeeAddTextBox_TextChanged);
+            this.NameEmployeeAddTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NameEmployeeAddTextBox_KeyPress);
             this.NameEmployeeAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.NameEmployeeAddTextBox_Validating);
             // 
             // TitlePanelAddEmployee
@@ -355,7 +357,7 @@
             this.FindEmployeePanel.Controls.Add(this.FindEmployeeByNameButton);
             this.FindEmployeePanel.Controls.Add(this.SearchEmployeeButton);
             this.FindEmployeePanel.Controls.Add(this.label7);
-            this.FindEmployeePanel.Location = new System.Drawing.Point(292, 3);
+            this.FindEmployeePanel.Location = new System.Drawing.Point(26, 45);
             this.FindEmployeePanel.Name = "FindEmployeePanel";
             this.FindEmployeePanel.Size = new System.Drawing.Size(776, 443);
             this.FindEmployeePanel.TabIndex = 6;
@@ -375,7 +377,7 @@
             "Специалист в одел Банкиране на дребно",
             "Управител",
             "Хигиенист"});
-            this.FindEmployeeByPositionComboBox.Location = new System.Drawing.Point(131, 170);
+            this.FindEmployeeByPositionComboBox.Location = new System.Drawing.Point(128, 144);
             this.FindEmployeeByPositionComboBox.Name = "FindEmployeeByPositionComboBox";
             this.FindEmployeeByPositionComboBox.Size = new System.Drawing.Size(444, 24);
             this.FindEmployeeByPositionComboBox.TabIndex = 13;
@@ -417,6 +419,8 @@
             this.SearchEmployeeTextBox.Size = new System.Drawing.Size(447, 26);
             this.SearchEmployeeTextBox.TabIndex = 10;
             this.SearchEmployeeTextBox.Visible = false;
+            this.SearchEmployeeTextBox.TextChanged += new System.EventHandler(this.SearchEmployeeTextBox_TextChanged);
+            this.SearchEmployeeTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchEmployeeTextBox_KeyPress);
             this.SearchEmployeeTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SearchEmployeeTextBox_Validating);
             // 
             // FindEmployeeByPositionButton
@@ -483,6 +487,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(837, 500);
+            this.Controls.Add(this.FindEmployeePanel);
             this.Controls.Add(this.menuStripAdmin);
             this.Controls.Add(this.AddNewEmployeePanel);
             this.Controls.Add(this.HelloLabel);
@@ -490,7 +495,6 @@
             this.MainMenuStrip = this.menuStripAdmin;
             this.Name = "AdminMainManu";
             this.Text = "Администратор";
-            this.Load += new System.EventHandler(this.AdminMainManu_Load);
             this.menuStripAdmin.ResumeLayout(false);
             this.menuStripAdmin.PerformLayout();
             this.AddNewEmployeePanel.ResumeLayout(false);

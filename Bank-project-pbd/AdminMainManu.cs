@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using Oracle.DataAccess.Client;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
+//uppdate id_employee in system_profile don`t work!
 
 namespace Bank_project_pbd
 {
@@ -23,7 +20,65 @@ namespace Bank_project_pbd
             PasswordEmployeeAddTextBox.UseSystemPasswordChar = true;
             PasswordEmployeeAddTextBox.PasswordChar = '*';
             PositionEmployeeAddComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            FindEmployeeByPositionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             ResultsFindEmployeeTable.Visible = false;
+        }
+
+        private bool hasEmptyFieldForEmployeeData()
+        {
+
+            foreach (Control control in Controls)
+            {
+                if (errorProviderError.GetError(control) != String.Empty)
+                    return true;
+            }
+            return false;
+        }
+
+        private void ShowResultsFinedEmployees(OracleCommand cmd)
+        {
+            OracleDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+
+                ResultsFindEmployeeTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+                ResultsFindEmployeeTable.ColumnStyles.Clear();
+                ResultsFindEmployeeTable.RowStyles.Clear();
+
+                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Име и фамилия", AutoSize = true }, 0, 0);
+                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Телефонен номер", AutoSize = true }, 1, 0);
+                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Позиция", AutoSize = true }, 2, 0);
+                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Редактирай", AutoSize = true }, 3, 0);
+                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Изтрий", AutoSize = true }, 4, 0);
+
+                for (int i = 1; reader.Read(); i++)
+                {
+                    ResultsFindEmployeeTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+                    int idEmployeeIndex = reader.GetOrdinal("ID_EMPLOYEE");
+                    int nameEmployeeIndex = reader.GetOrdinal("NAME_EMPLOYEE");
+                    int phoneEmployeeIndex = reader.GetOrdinal("PHONE_EMPLOYEE");
+                    int positionEmployeeIndex = reader.GetOrdinal("POSITION_TYPE");
+                    Button edit = new Button();
+                    edit.Text = "🖋";
+                    edit.Tag = (int)reader.GetDecimal(idEmployeeIndex);
+                    edit.Click += EditEmployeeButton_Click;
+                    edit.AutoSize = true;
+                    Button delete = new Button();
+                    delete.Text = " X ";
+                    delete.Tag = (int)reader.GetDecimal(idEmployeeIndex);
+                    delete.Click += DeleteDataButton_Click;
+                    delete.AutoSize = true;
+                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(nameEmployeeIndex), AutoSize = true }, 0, i);
+                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(phoneEmployeeIndex), AutoSize = true }, 1, i);
+                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(positionEmployeeIndex), AutoSize = true }, 2, i);
+                    ResultsFindEmployeeTable.Controls.Add(edit, 3, i);
+                    ResultsFindEmployeeTable.Controls.Add(delete, 4, i);
+                }
+                ResultsFindEmployeeTable.AutoScroll = true;
+                ResultsFindEmployeeTable.Visible = true;
+            }
+            else ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Няма намерени служители!" }, 0, 0);
         }
 
         private void AddEmployeeMenu_Click(object sender, EventArgs e)
@@ -36,17 +91,14 @@ namespace Bank_project_pbd
             AddNewEmployeePanel.BringToFront();
             AddNewEmployeePanel.Visible = true;
             ResultsFindEmployeeTable.Controls.Clear();
+
         }
 
         private void TtitleEmployeeInfoButton_Click(object sender, EventArgs e)
         {
-            bool hasError = false;
-            foreach (Control control in Controls)
-                if (errorProviderError.GetError(control) != String.Empty) hasError = true;
-
-            if (hasError)
+            if (TitleEmployeeInfoButton.Text.Equals("Добави служител"))
             {
-                if (TitleEmployeeInfoButton.Text.Equals("Добави служител"))
+                if (!hasEmptyFieldForEmployeeData())
                 {
                     OracleCommand commandAddProfile = new OracleCommand("insert_system_profile", con);
                     commandAddProfile.CommandType = CommandType.StoredProcedure;
@@ -68,21 +120,27 @@ namespace Bank_project_pbd
                     commandAddEmployee.ExecuteNonQuery();
 
                     int newIdEmployee = Convert.ToInt32(new OracleCommand("SELECT MAX(id_employee) FROM employee", con).ExecuteScalar());
+
                     OracleCommand commandAddEmployeeToProfiles = con.CreateCommand();
-                    String sql = "UPDATE system_profile SET id_employee = :id_employee WHERE id_profile = :id_profile";
+                    OracleTransaction transaction = con.BeginTransaction();
+                    commandAddEmployeeToProfiles.Transaction = transaction;
+                    commandAddEmployeeToProfiles.CommandText = "UPDATE system_profile SET id_employee = :id_employee WHERE id_profile = :id_profile";
                     commandAddEmployeeToProfiles.Parameters.Add("id_profile", OracleDbType.Int32).Value = newIdProfile;
                     commandAddEmployeeToProfiles.Parameters.Add("id_employee", OracleDbType.Int32).Value = newIdEmployee;
-                    commandAddEmployeeToProfiles.CommandText = sql;
                     commandAddEmployeeToProfiles.ExecuteNonQuery();
+                    transaction.Commit();
 
                     DialogResult result = MessageBox.Show("Успешно добавен служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (result == DialogResult.OK)
                     {
-                        AddNewEmployeePanel.Controls.Clear();
+                        CancelAddEmployeeButton_Click(null, null);
                         AddNewEmployeePanel.Visible = false;
                     }
                 }
-                else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител"))
+            }
+            else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител"))
+            {
+                if (!hasEmptyFieldForEmployeeData())
                 {
                     ArrayList tags = (ArrayList)AddNewEmployeePanel.Tag;
                     int id_employee = (int)tags[0];
@@ -110,25 +168,42 @@ namespace Bank_project_pbd
                     DialogResult result = MessageBox.Show("Успешно редактиран служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (result == DialogResult.OK)
                     {
-                        AddNewEmployeePanel.Controls.Clear();
+                        CancelAddEmployeeButton_Click(null, null);
                         AddNewEmployeePanel.Visible = false;
                     }
                     AddNewEmployeePanel.Tag = null;
                 }
-            }        
+            }
         }
 
         private void CancelAddEmployeeButton_Click(object sender, EventArgs e)
         {
             AddNewEmployeePanel.Visible = false;
-            foreach (Control control in Controls)
+            foreach (Control control in groupBoxEmployeeDataAdd.Controls)
             {
                 if (control is TextBox)
-                    ((TextBox)control).Clear();
+                {
+                    ((TextBox)control).Text = String.Empty;
+                    errorProviderError.SetError(control, String.Empty);
+
+                }
                 else if (control is ComboBox)
+                {
                     ((ComboBox)control).SelectedIndex = -1;
+                    errorProviderError.SetError(control, String.Empty);
+                }
+            }
+
+            foreach (Control control in ProfileDataEmployeeAdd.Controls)
+            {
+                if (control is TextBox)
+                {
+                    ((TextBox)control).Text = String.Empty;
+                    errorProviderError.SetError(control, String.Empty);
+                }
             }
         }
+
 
         private void FindEmployeeMenu_Click(object sender, EventArgs e)
         {
@@ -173,9 +248,9 @@ namespace Bank_project_pbd
             FindEmployeeByPositionButton.BackColor = System.Drawing.Color.LightGray;
             FindEmployeeByNameButton.BackColor = System.Drawing.Color.White;
             FindEmployeeByPhoneButton.BackColor = System.Drawing.Color.White;
-            SearchImageFindEmployee.Visible = true;
             SearchEmployeeButton.Visible = true;
             SearchEmployeeTextBox.Visible = false;
+            SearchEmployeeTextBox.Text = String.Empty;
             FindEmployeeByPositionComboBox.Visible = true;
             FindEmployeeByPositionComboBox.SelectedIndex = -1;
             ResultsFindEmployeeTable.Visible = false;
@@ -209,53 +284,7 @@ namespace Bank_project_pbd
             }
             //error provider
         }
-
-        private void ShowResultsFinedEmployees(OracleCommand cmd)
-        {
-            OracleDataReader reader = cmd.ExecuteReader();
-            if (reader.HasRows)
-            {
   
-                ResultsFindEmployeeTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                ResultsFindEmployeeTable.ColumnStyles.Clear();
-                ResultsFindEmployeeTable.RowStyles.Clear();
-
-                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Име и фамилия", AutoSize = true }, 0, 0);
-                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Телефонен номер", AutoSize = true }, 1, 0);
-                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Позиция", AutoSize = true }, 2, 0);
-                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Редактирай", AutoSize = true }, 3, 0);
-                ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Изтрий", AutoSize = true }, 4, 0);
-
-                for (int i = 1; reader.Read(); i++)
-                {
-                    ResultsFindEmployeeTable.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-
-                    int idEmployeeIndex = reader.GetOrdinal("ID_EMPLOYEE");
-                    int nameEmployeeIndex = reader.GetOrdinal("NAME_EMPLOYEE");
-                    int phoneEmployeeIndex = reader.GetOrdinal("PHONE_EMPLOYEE");
-                    int positionEmployeeIndex = reader.GetOrdinal("POSITION_TYPE");
-                    Button edit = new Button();
-                    edit.Text = "🖋";
-                    edit.Tag = (int)reader.GetDecimal(idEmployeeIndex);
-                    edit.Click += EditEmployeeButton_Click;
-                    edit.AutoSize = true;
-                    Button delete = new Button();
-                    delete.Text = " X ";
-                    delete.Tag = (int)reader.GetDecimal(idEmployeeIndex);
-                    delete.Click += DeleteDataButton_Click;
-                    delete.AutoSize = true;
-                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(nameEmployeeIndex), AutoSize= true }, 0, i);
-                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(phoneEmployeeIndex), AutoSize = true }, 1, i);
-                    ResultsFindEmployeeTable.Controls.Add(new Label() { Text = reader.GetString(positionEmployeeIndex), AutoSize = true }, 2, i);
-                    ResultsFindEmployeeTable.Controls.Add(edit, 3, i);
-                    ResultsFindEmployeeTable.Controls.Add(delete, 4, i);
-                }
-                ResultsFindEmployeeTable.AutoScroll = true;
-                ResultsFindEmployeeTable.Visible = true;
-            }
-            else;//error provider
-        }
-
         private void EditEmployeeButton_Click(object sender, EventArgs e)
         {
             FindEmployeePanel.Visible = false;
@@ -326,10 +355,10 @@ namespace Bank_project_pbd
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add(":id", OracleDbType.Decimal).Value = id_profile;
                 cmd.ExecuteNonQuery();
+
                 result = MessageBox.Show("Успешно изтрит служител!", "Потвърждение", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (result == DialogResult.OK)
                 {
-                    FindEmployeePanel.Controls.Clear();
                     FindEmployeePanel.Visible = false;
                 }
                 FindEmployeePanel.Tag = null;
@@ -337,24 +366,23 @@ namespace Bank_project_pbd
 
         }
 
+
         private void ExitProfileMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Сигурни ли сте, че искате да излезете?", "Потвърждение за излизане", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
+                SignInSystem signInSystem = new SignInSystem();
+                this.Hide();
+                signInSystem.ShowDialog();
                 this.Close();
-                new SignInSystem().ShowDialog();
             }
         }
 
-        private void AdminMainManu_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void NameEmployeeAddTextBox_Validating(object sender, CancelEventArgs e)
         {
-            if (NameEmployeeAddTextBox.Text == string.Empty)
+            if (string.IsNullOrWhiteSpace(NameEmployeeAddTextBox.Text))
             {
                 errorProviderError.SetError(NameEmployeeAddTextBox, "Въведете име и фамилия!");
             }            
@@ -362,7 +390,7 @@ namespace Bank_project_pbd
 
         private void PhoneEmployeeAddTextBox_Validating(object sender, CancelEventArgs e)
         {
-            if (PhoneEmployeeAddTextBox.Text == string.Empty)
+            if (string.IsNullOrWhiteSpace(PhoneEmployeeAddTextBox.Text))
             {
                 errorProviderError.SetError(PhoneEmployeeAddTextBox, "Въведете телефонен номер!");
             }
@@ -370,7 +398,7 @@ namespace Bank_project_pbd
 
         private void PositionEmployeeAddComboBox_Validating(object sender, CancelEventArgs e)
         {
-            if (PositionEmployeeAddComboBox.Text == string.Empty)
+            if ( PositionEmployeeAddComboBox.SelectedIndex == -1)
             {
                 errorProviderError.SetError(PositionEmployeeAddComboBox, "Изберете позиция!");
             }
@@ -384,26 +412,6 @@ namespace Bank_project_pbd
             }
         }
 
-        private void PasswordEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (PasswordEmployeeAddTextBox.Text == string.Empty)
-            {
-                errorProviderError.SetError(PasswordEmployeeAddTextBox, "Въведете парола!");
-            }
-        }
-
-        private void NameEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
-        {
-            foreach (char letter in NameEmployeeAddTextBox.Text)
-            {
-                if (!char.IsLetter(letter))
-                {
-                    errorProviderError.SetError(PasswordEmployeeAddTextBox, "Невалидни данни!");
-                }
-            }
-            errorProviderError.SetError(PasswordEmployeeAddTextBox, String.Empty);
-        }
-
         private void FindEmployeeByPositionComboBox_Validating(object sender, CancelEventArgs e)
         {
             if (FindEmployeeByPositionComboBox.SelectedIndex == -1)
@@ -414,10 +422,124 @@ namespace Bank_project_pbd
 
         private void SearchEmployeeTextBox_Validating(object sender, CancelEventArgs e)
         {
-            if (SearchEmployeeTextBox.Text == string.Empty)
+            if (string.IsNullOrWhiteSpace(SearchEmployeeTextBox.Text))
             {
                 errorProviderError.SetError(SearchEmployeeTextBox, "Въведете данни за търсене!");
             }
         }
+
+
+        private void PasswordEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(PasswordEmployeeAddTextBox.Text))
+            {
+                errorProviderError.SetError(PasswordEmployeeAddTextBox, "Въведете парола!");
+            }
+        }
+
+        private void UsernameEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
+        {
+            
+            String sql = "SELECT COUNT(*) FROM system_profile WHERE username = :username";
+            OracleCommand cmd = con.CreateCommand();
+            cmd.Parameters.Add("username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
+            cmd.CommandText = sql;
+            if ((TitleEmployeeInfoButton.Text == "Редактирай служител" && Convert.ToInt32(cmd.ExecuteScalar()) > 1) || (TitleEmployeeInfoButton.Text == "Добави служител" && Convert.ToInt32(cmd.ExecuteScalar()) == 1))
+            {
+                errorProviderError.SetError(UsernameEmployeeAddTextBox, "Вече има регистринан служител с това потребителско име!");
+            }
+            else errorProviderError.SetError(UsernameEmployeeAddTextBox, String.Empty);
+
+        }
+
+        private void PhoneEmployeeAddTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (PhoneEmployeeAddTextBox.Text.Length != 10)
+            {
+                errorProviderError.SetError(PhoneEmployeeAddTextBox, "Телефонният номер трябва да е с дължина 10 цифри!");
+            }
+            else
+            {
+                OracleCommand cmd = con.CreateCommand();
+                String sql = "SELECT COUNT(*) FROM employee WHERE phone_employee = :phone";
+                cmd.Parameters.Add("phone", OracleDbType.Varchar2).Value = PhoneEmployeeAddTextBox.Text;
+                cmd.CommandText = sql;
+                if ((TitleEmployeeInfoButton.Text == "Редактирай служител" && Convert.ToInt32(cmd.ExecuteScalar())>1) || (TitleEmployeeInfoButton.Text == "Добави служител" && Convert.ToInt32(cmd.ExecuteScalar())==1))
+                {
+                    errorProviderError.SetError(PhoneEmployeeAddTextBox, "Вече има регистринан служител с този телефонен номер!");
+                }
+                else errorProviderError.SetError(PhoneEmployeeAddTextBox, String.Empty);
+            }
+        }
+
+        private void SearchEmployeeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (FindEmployeeByPhoneButton.BackColor == System.Drawing.Color.LightGray && PhoneEmployeeAddTextBox.Text.Length != 10)
+            {
+                errorProviderError.SetError(PhoneEmployeeAddTextBox, "Телефонният номер трябва да е с дължина 10 цифри!");
+            }
+        }
+
+        private void PhoneEmployeeAddTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            bool findLetter = false;
+            foreach (int number in PhoneEmployeeAddTextBox.Text)
+            {
+                if (!char.IsDigit(e.KeyChar))
+                {
+                    errorProviderError.SetError(PhoneEmployeeAddTextBox, "Телефонният номер трябва да съдържа само числа!");
+                    findLetter = true;
+                }
+            }                
+            if(!findLetter) 
+                errorProviderError.SetError(PhoneEmployeeAddTextBox, String.Empty);
+        }
+
+        private void NameEmployeeAddTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            bool findNumber = false;
+            foreach (char letter in NameEmployeeAddTextBox.Text)
+            {
+                if (!char.IsLetter(letter) && !char.IsWhiteSpace(letter))
+                {
+                    errorProviderError.SetError(NameEmployeeAddTextBox, "Невалидни данни!");
+                    findNumber = true; 
+                }
+            }                
+            if(!findNumber)
+                errorProviderError.SetError(NameEmployeeAddTextBox, String.Empty);
+        }
+
+        private void SearchEmployeeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(FindEmployeeByNameButton.BackColor == System.Drawing.Color.LightGray)
+            {
+                bool findNumber = false;
+                foreach (char letter in SearchEmployeeButton.Text)
+                {
+                    if (!char.IsLetter(letter) && !char.IsWhiteSpace(letter))
+                    {
+                        errorProviderError.SetError(SearchEmployeeButton, "Невалидни данни!");
+                        findNumber = true;
+                    }
+                }
+                if (!findNumber)
+                    errorProviderError.SetError(SearchEmployeeButton, String.Empty);
+            }
+            else
+            {
+                bool findLetter = false;
+                foreach (int number in SearchEmployeeButton.Text)
+                {
+                    if (!char.IsDigit(e.KeyChar))
+                    {
+                        errorProviderError.SetError(SearchEmployeeButton, "Телефонният номер трябва да съдържа само числа!");
+                        findLetter = true;
+                    }
+                }
+                if (!findLetter)
+                    errorProviderError.SetError(SearchEmployeeButton, String.Empty);
+            }
+        }        
     }   
 }

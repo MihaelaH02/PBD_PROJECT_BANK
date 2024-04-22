@@ -51,11 +51,17 @@ namespace Bank_project_pbd
 
                 if (roleType == 1)
                 {
-                    new AdminMainManu().ShowDialog();
+                    AdminMainManu adminMainManu = new AdminMainManu();
+                    this.Hide();
+                    adminMainManu.ShowDialog();
+                    this.Close();
                 }
                 else if (roleType == 2)
                 {
-                    new EmployeeMainManu().ShowDialog();
+                    EmployeeMainManu employeeMainManu = new EmployeeMainManu();
+                    this.Hide();
+                    employeeMainManu.ShowDialog();
+                    this.Close();
                 }
                 else;//client
             }
