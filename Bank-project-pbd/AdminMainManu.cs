@@ -11,6 +11,8 @@ namespace Bank_project_pbd
     public partial class AdminMainManu : Form
     {
         private OracleConnection con;
+
+        [Obsolete]
         public AdminMainManu()
         {
             InitializeComponent();
@@ -40,7 +42,6 @@ namespace Bank_project_pbd
             OracleDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
-
                 ResultsFindEmployeeTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
                 ResultsFindEmployeeTable.ColumnStyles.Clear();
                 ResultsFindEmployeeTable.RowStyles.Clear();
@@ -81,6 +82,7 @@ namespace Bank_project_pbd
             else ResultsFindEmployeeTable.Controls.Add(new Label() { Text = "Няма намерени служители!" }, 0, 0);
         }
 
+
         private void AddEmployeeMenu_Click(object sender, EventArgs e)
         {
             TitleEmployeeInfoLabel.Text = "Добави нов служител";
@@ -96,10 +98,11 @@ namespace Bank_project_pbd
 
         private void TtitleEmployeeInfoButton_Click(object sender, EventArgs e)
         {
-            if (TitleEmployeeInfoButton.Text.Equals("Добави служител"))
+            if (!hasEmptyFieldForEmployeeData())
             {
-                if (!hasEmptyFieldForEmployeeData())
+                if (TitleEmployeeInfoButton.Text.Equals("Добави служител"))
                 {
+
                     OracleCommand commandAddProfile = new OracleCommand("insert_system_profile", con);
                     commandAddProfile.CommandType = CommandType.StoredProcedure;
                     commandAddProfile.Parameters.Add("p_username", OracleDbType.Varchar2).Value = UsernameEmployeeAddTextBox.Text;
@@ -136,11 +139,9 @@ namespace Bank_project_pbd
                         CancelAddEmployeeButton_Click(null, null);
                         AddNewEmployeePanel.Visible = false;
                     }
+
                 }
-            }
-            else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител"))
-            {
-                if (!hasEmptyFieldForEmployeeData())
+                else if (TitleEmployeeInfoButton.Text.Equals("Редактирай служител"))
                 {
                     ArrayList tags = (ArrayList)AddNewEmployeePanel.Tag;
                     int id_employee = (int)tags[0];
@@ -285,6 +286,7 @@ namespace Bank_project_pbd
             //error provider
         }
   
+
         private void EditEmployeeButton_Click(object sender, EventArgs e)
         {
             FindEmployeePanel.Visible = false;
@@ -308,7 +310,7 @@ namespace Bank_project_pbd
 
                 NameEmployeeAddTextBox.Text = reader.GetString(nameEmployeeIndex);
                 PhoneEmployeeAddTextBox.Text = reader.GetString(phoneEmployeeIndex);
-                PositionEmployeeAddComboBox.SelectedIndex = positionEmployeeIndex;
+                PositionEmployeeAddComboBox.SelectedIndex =(int) reader.GetDecimal(positionEmployeeIndex);
                 UsernameEmployeeAddTextBox.Text = reader.GetString(usernameEmployeeIndex);
                 PasswordEmployeeAddTextBox.Text = reader.GetString(passwordEmployeeIndex);
 
@@ -479,6 +481,7 @@ namespace Bank_project_pbd
                 errorProviderError.SetError(PhoneEmployeeAddTextBox, "Телефонният номер трябва да е с дължина 10 цифри!");
             }
         }
+
 
         private void PhoneEmployeeAddTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {

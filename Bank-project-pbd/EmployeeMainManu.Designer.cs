@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.AddNewClientPanel = new System.Windows.Forms.Panel();
             this.CancelAddClientButton = new System.Windows.Forms.Button();
             this.TitleClientInfoButton = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.SearchClientTextBox = new System.Windows.Forms.TextBox();
             this.FindClientByPhoneButton = new System.Windows.Forms.Button();
             this.FinedClientGroupBox = new System.Windows.Forms.GroupBox();
+            this.FinedClientNameDataLabel = new System.Windows.Forms.Label();
             this.FinedClientEmailLabel = new System.Windows.Forms.Label();
             this.FinedClientEmailDataLabel = new System.Windows.Forms.Label();
             this.FinedClientEGNDataLabel = new System.Windows.Forms.Label();
@@ -73,16 +75,34 @@
             this.SearchClientButton = new System.Windows.Forms.Button();
             this.FindClientLabel = new System.Windows.Forms.Label();
             this.menuStripAdmin = new System.Windows.Forms.MenuStrip();
-            this.AddNewClienrMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddNewClientMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FindClientMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitProfileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.FinedClientNameDataLabel = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.AddNewAccountButton = new System.Windows.Forms.Button();
+            this.AddNewAccountPanel = new System.Windows.Forms.Panel();
+            this.CancelAccountButton = new System.Windows.Forms.Button();
+            this.AddOrEditAccountButton = new System.Windows.Forms.Button();
+            this.StatusAccountLabel = new System.Windows.Forms.Label();
+            this.CurrencyAccoutComboBox = new System.Windows.Forms.ComboBox();
+            this.AvailabilityAmountAccountLabel = new System.Windows.Forms.Label();
+            this.InterestAccountLabel = new System.Windows.Forms.Label();
+            this.AmountAccountTextBox = new System.Windows.Forms.TextBox();
+            this.InterestAccountTextBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.TitleAccountlabel = new System.Windows.Forms.Label();
+            this.NumberAccountTextBox = new System.Windows.Forms.TextBox();
+            this.NumberAccountLabel = new System.Windows.Forms.Label();
+            this.CurrencyAccountLabel = new System.Windows.Forms.Label();
+            this.StatusAccountComboBox = new System.Windows.Forms.ComboBox();
             this.AddNewClientPanel.SuspendLayout();
             this.ProfileDataClientAdd.SuspendLayout();
             this.groupBoxClientDataAdd.SuspendLayout();
             this.FindClientPanel.SuspendLayout();
             this.FinedClientGroupBox.SuspendLayout();
             this.menuStripAdmin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.AddNewAccountPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // AddNewClientPanel
@@ -94,7 +114,7 @@
             this.AddNewClientPanel.Controls.Add(this.groupBoxClientDataAdd);
             this.AddNewClientPanel.Controls.Add(this.TitlePanelAddEmployee);
             this.AddNewClientPanel.Controls.Add(this.TitleClientInfoLabel);
-            this.AddNewClientPanel.Location = new System.Drawing.Point(181, 55);
+            this.AddNewClientPanel.Location = new System.Drawing.Point(179, 70);
             this.AddNewClientPanel.Name = "AddNewClientPanel";
             this.AddNewClientPanel.Size = new System.Drawing.Size(805, 438);
             this.AddNewClientPanel.TabIndex = 5;
@@ -185,6 +205,7 @@
             this.PasswordClientAddTextBox.Name = "PasswordClientAddTextBox";
             this.PasswordClientAddTextBox.Size = new System.Drawing.Size(269, 29);
             this.PasswordClientAddTextBox.TabIndex = 4;
+            this.PasswordClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PasswordClientAddTextBox_Validating);
             // 
             // UsernameClientAddTextBox
             // 
@@ -193,6 +214,7 @@
             this.UsernameClientAddTextBox.Name = "UsernameClientAddTextBox";
             this.UsernameClientAddTextBox.Size = new System.Drawing.Size(269, 29);
             this.UsernameClientAddTextBox.TabIndex = 3;
+            this.UsernameClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.UsernameClientAddTextBox_Validating);
             // 
             // groupBoxClientDataAdd
             // 
@@ -221,6 +243,7 @@
             this.EmailClientAddTextBox.Name = "EmailClientAddTextBox";
             this.EmailClientAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.EmailClientAddTextBox.TabIndex = 13;
+            this.EmailClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.EmailClientAddTextBox_Validating);
             // 
             // EmailClientLabel
             // 
@@ -239,6 +262,7 @@
             this.AddressClientAddTextBox.Name = "AddressClientAddTextBox";
             this.AddressClientAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.AddressClientAddTextBox.TabIndex = 11;
+            this.AddressClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.AddressClientAddTextBox_Validating);
             // 
             // EGNClientAddTextBox
             // 
@@ -247,6 +271,9 @@
             this.EGNClientAddTextBox.Name = "EGNClientAddTextBox";
             this.EGNClientAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.EGNClientAddTextBox.TabIndex = 10;
+            this.EGNClientAddTextBox.TextChanged += new System.EventHandler(this.EGNClientAddTextBox_TextChanged);
+            this.EGNClientAddTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.EGNClientAddTextBox_KeyPress);
+            this.EGNClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.EGNClientAddTextBox_Validating);
             // 
             // EGNClientLabel
             // 
@@ -295,6 +322,9 @@
             this.PhoneClientAddTextBox.Name = "PhoneClientAddTextBox";
             this.PhoneClientAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.PhoneClientAddTextBox.TabIndex = 2;
+            this.PhoneClientAddTextBox.TextChanged += new System.EventHandler(this.PhoneClientAddTextBox_TextChanged);
+            this.PhoneClientAddTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PhoneClientAddTextBox_KeyPress);
+            this.PhoneClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PhoneClientAddTextBox_Validating);
             // 
             // NameClientAddTextBox
             // 
@@ -303,6 +333,8 @@
             this.NameClientAddTextBox.Name = "NameClientAddTextBox";
             this.NameClientAddTextBox.Size = new System.Drawing.Size(288, 29);
             this.NameClientAddTextBox.TabIndex = 1;
+            this.NameClientAddTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NameClientAddTextBox_KeyPress);
+            this.NameClientAddTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.NameClientAddTextBox_Validating);
             // 
             // TitlePanelAddEmployee
             // 
@@ -330,6 +362,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FindClientPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.FindClientPanel.Controls.Add(this.AddNewAccountPanel);
+            this.FindClientPanel.Controls.Add(this.AddNewAccountButton);
             this.FindClientPanel.Controls.Add(this.DeleteClienButton);
             this.FindClientPanel.Controls.Add(this.EditClientButton);
             this.FindClientPanel.Controls.Add(this.SearchClientTextBox);
@@ -340,18 +374,18 @@
             this.FindClientPanel.Controls.Add(this.FindClientByNameButton);
             this.FindClientPanel.Controls.Add(this.SearchClientButton);
             this.FindClientPanel.Controls.Add(this.FindClientLabel);
-            this.FindClientPanel.Location = new System.Drawing.Point(41, 33);
+            this.FindClientPanel.Location = new System.Drawing.Point(42, 33);
             this.FindClientPanel.Name = "FindClientPanel";
-            this.FindClientPanel.Size = new System.Drawing.Size(1069, 547);
+            this.FindClientPanel.Size = new System.Drawing.Size(1078, 580);
             this.FindClientPanel.TabIndex = 6;
             this.FindClientPanel.Visible = false;
             // 
             // DeleteClienButton
             // 
             this.DeleteClienButton.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DeleteClienButton.Location = new System.Drawing.Point(208, 486);
+            this.DeleteClienButton.Location = new System.Drawing.Point(207, 502);
             this.DeleteClienButton.Name = "DeleteClienButton";
-            this.DeleteClienButton.Size = new System.Drawing.Size(122, 28);
+            this.DeleteClienButton.Size = new System.Drawing.Size(127, 44);
             this.DeleteClienButton.TabIndex = 14;
             this.DeleteClienButton.Text = "Изтрий";
             this.DeleteClienButton.UseVisualStyleBackColor = true;
@@ -361,31 +395,34 @@
             // EditClientButton
             // 
             this.EditClientButton.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EditClientButton.Location = new System.Drawing.Point(53, 486);
+            this.EditClientButton.Location = new System.Drawing.Point(53, 502);
             this.EditClientButton.Name = "EditClientButton";
-            this.EditClientButton.Size = new System.Drawing.Size(122, 28);
+            this.EditClientButton.Size = new System.Drawing.Size(122, 44);
             this.EditClientButton.TabIndex = 13;
             this.EditClientButton.Text = "Редактирай";
             this.EditClientButton.UseVisualStyleBackColor = true;
             this.EditClientButton.Visible = false;
+            this.EditClientButton.Click += new System.EventHandler(this.EditClientButton_Click);
             // 
             // SearchClientTextBox
             // 
             this.SearchClientTextBox.Font = new System.Drawing.Font("Calibri", 10F);
-            this.SearchClientTextBox.Location = new System.Drawing.Point(478, 79);
+            this.SearchClientTextBox.Location = new System.Drawing.Point(495, 84);
             this.SearchClientTextBox.Name = "SearchClientTextBox";
-            this.SearchClientTextBox.Size = new System.Drawing.Size(447, 28);
+            this.SearchClientTextBox.Size = new System.Drawing.Size(377, 28);
             this.SearchClientTextBox.TabIndex = 10;
-            this.SearchClientTextBox.Visible = false;
+            this.SearchClientTextBox.TextChanged += new System.EventHandler(this.SearchClientTextBox_TextChanged);
+            this.SearchClientTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SearchClientTextBox_KeyPress);
+            this.SearchClientTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.SearchClientTextBox_Validating);
             // 
             // FindClientByPhoneButton
             // 
             this.FindClientByPhoneButton.Font = new System.Drawing.Font("Calibri", 10F);
-            this.FindClientByPhoneButton.Location = new System.Drawing.Point(166, 73);
+            this.FindClientByPhoneButton.Location = new System.Drawing.Point(158, 78);
             this.FindClientByPhoneButton.Name = "FindClientByPhoneButton";
             this.FindClientByPhoneButton.Size = new System.Drawing.Size(178, 36);
             this.FindClientByPhoneButton.TabIndex = 8;
-            this.FindClientByPhoneButton.Text = "по телефонен номер";
+            this.FindClientByPhoneButton.Text = "Телефонен номер";
             this.FindClientByPhoneButton.UseVisualStyleBackColor = true;
             this.FindClientByPhoneButton.Click += new System.EventHandler(this.FindClientByPhoneButton_Click);
             // 
@@ -403,12 +440,21 @@
             this.FinedClientGroupBox.Controls.Add(this.FinedClientPhoneLabel);
             this.FinedClientGroupBox.Controls.Add(this.FinedClientNameLabel);
             this.FinedClientGroupBox.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FinedClientGroupBox.Location = new System.Drawing.Point(33, 121);
+            this.FinedClientGroupBox.Location = new System.Drawing.Point(33, 130);
             this.FinedClientGroupBox.Name = "FinedClientGroupBox";
-            this.FinedClientGroupBox.Size = new System.Drawing.Size(311, 359);
+            this.FinedClientGroupBox.Size = new System.Drawing.Size(311, 366);
             this.FinedClientGroupBox.TabIndex = 0;
             this.FinedClientGroupBox.TabStop = false;
             this.FinedClientGroupBox.Text = "Клиент";
+            // 
+            // FinedClientNameDataLabel
+            // 
+            this.FinedClientNameDataLabel.AutoSize = true;
+            this.FinedClientNameDataLabel.Font = new System.Drawing.Font("Calibri Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FinedClientNameDataLabel.Location = new System.Drawing.Point(13, 45);
+            this.FinedClientNameDataLabel.Name = "FinedClientNameDataLabel";
+            this.FinedClientNameDataLabel.Size = new System.Drawing.Size(0, 18);
+            this.FinedClientNameDataLabel.TabIndex = 10;
             // 
             // FinedClientEmailLabel
             // 
@@ -504,25 +550,27 @@
             // 
             // ResultsFindClientTable
             // 
-            this.ResultsFindClientTable.ColumnCount = 5;
+            this.ResultsFindClientTable.ColumnCount = 7;
             this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.ResultsFindClientTable.Location = new System.Drawing.Point(358, 130);
+            this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.ResultsFindClientTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.ResultsFindClientTable.Location = new System.Drawing.Point(358, 139);
             this.ResultsFindClientTable.Name = "ResultsFindClientTable";
             this.ResultsFindClientTable.RowCount = 1;
             this.ResultsFindClientTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ResultsFindClientTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 400F));
-            this.ResultsFindClientTable.Size = new System.Drawing.Size(695, 400);
+            this.ResultsFindClientTable.Size = new System.Drawing.Size(670, 357);
             this.ResultsFindClientTable.TabIndex = 12;
             this.ResultsFindClientTable.Visible = false;
             // 
             // FindClientByEGNButton
             // 
             this.FindClientByEGNButton.Font = new System.Drawing.Font("Calibri", 10F);
-            this.FindClientByEGNButton.Location = new System.Drawing.Point(350, 73);
+            this.FindClientByEGNButton.Location = new System.Drawing.Point(348, 79);
             this.FindClientByEGNButton.Name = "FindClientByEGNButton";
             this.FindClientByEGNButton.Size = new System.Drawing.Size(122, 36);
             this.FindClientByEGNButton.TabIndex = 9;
@@ -533,7 +581,7 @@
             // FindClientByNameButton
             // 
             this.FindClientByNameButton.Font = new System.Drawing.Font("Calibri", 10F);
-            this.FindClientByNameButton.Location = new System.Drawing.Point(33, 73);
+            this.FindClientByNameButton.Location = new System.Drawing.Point(30, 75);
             this.FindClientByNameButton.Name = "FindClientByNameButton";
             this.FindClientByNameButton.Size = new System.Drawing.Size(122, 36);
             this.FindClientByNameButton.TabIndex = 7;
@@ -543,21 +591,21 @@
             // 
             // SearchClientButton
             // 
+            this.SearchClientButton.Enabled = false;
             this.SearchClientButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.SearchClientButton.Location = new System.Drawing.Point(931, 77);
+            this.SearchClientButton.Location = new System.Drawing.Point(906, 84);
             this.SearchClientButton.Name = "SearchClientButton";
-            this.SearchClientButton.Size = new System.Drawing.Size(122, 28);
+            this.SearchClientButton.Size = new System.Drawing.Size(122, 35);
             this.SearchClientButton.TabIndex = 5;
             this.SearchClientButton.Text = "Търси";
             this.SearchClientButton.UseVisualStyleBackColor = true;
-            this.SearchClientButton.Visible = false;
             this.SearchClientButton.Click += new System.EventHandler(this.SearchClientButton_Click);
             // 
             // FindClientLabel
             // 
             this.FindClientLabel.AutoSize = true;
             this.FindClientLabel.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FindClientLabel.Location = new System.Drawing.Point(415, 19);
+            this.FindClientLabel.Location = new System.Drawing.Point(443, 16);
             this.FindClientLabel.Name = "FindClientLabel";
             this.FindClientLabel.Size = new System.Drawing.Size(186, 37);
             this.FindClientLabel.TabIndex = 0;
@@ -568,22 +616,22 @@
             this.menuStripAdmin.Font = new System.Drawing.Font("Calibri", 10F);
             this.menuStripAdmin.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStripAdmin.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddNewClienrMenuItem,
+            this.AddNewClientMenuItem,
             this.FindClientMenuItem,
             this.ExitProfileMenuItem});
             this.menuStripAdmin.Location = new System.Drawing.Point(0, 0);
             this.menuStripAdmin.Name = "menuStripAdmin";
-            this.menuStripAdmin.Size = new System.Drawing.Size(1169, 30);
+            this.menuStripAdmin.Size = new System.Drawing.Size(1178, 30);
             this.menuStripAdmin.TabIndex = 6;
             this.menuStripAdmin.Text = "menuStrip1";
             // 
-            // AddNewClienrMenuItem
+            // AddNewClientMenuItem
             // 
-            this.AddNewClienrMenuItem.Font = new System.Drawing.Font("Calibri", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddNewClienrMenuItem.Name = "AddNewClienrMenuItem";
-            this.AddNewClienrMenuItem.Size = new System.Drawing.Size(174, 26);
-            this.AddNewClienrMenuItem.Text = "Добави нов клиент";
-            this.AddNewClienrMenuItem.Click += new System.EventHandler(this.AddNewClienrMenuItem_Click);
+            this.AddNewClientMenuItem.Font = new System.Drawing.Font("Calibri", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddNewClientMenuItem.Name = "AddNewClientMenuItem";
+            this.AddNewClientMenuItem.Size = new System.Drawing.Size(174, 26);
+            this.AddNewClientMenuItem.Text = "Добави нов клиент";
+            this.AddNewClientMenuItem.Click += new System.EventHandler(this.AddNewClientMenuItem_Click);
             // 
             // FindClientMenuItem
             // 
@@ -598,28 +646,204 @@
             this.ExitProfileMenuItem.Name = "ExitProfileMenuItem";
             this.ExitProfileMenuItem.Size = new System.Drawing.Size(67, 26);
             this.ExitProfileMenuItem.Text = "Изход";
-            this.ExitProfileMenuItem.Click += new System.EventHandler(this.ExitProfileMenuItem_Click);
             // 
-            // FinedClientNameDataLabel
+            // errorProvider1
             // 
-            this.FinedClientNameDataLabel.AutoSize = true;
-            this.FinedClientNameDataLabel.Font = new System.Drawing.Font("Calibri Light", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FinedClientNameDataLabel.Location = new System.Drawing.Point(13, 45);
-            this.FinedClientNameDataLabel.Name = "FinedClientNameDataLabel";
-            this.FinedClientNameDataLabel.Size = new System.Drawing.Size(0, 18);
-            this.FinedClientNameDataLabel.TabIndex = 10;
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // AddNewAccountButton
+            // 
+            this.AddNewAccountButton.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AddNewAccountButton.Location = new System.Drawing.Point(621, 502);
+            this.AddNewAccountButton.Name = "AddNewAccountButton";
+            this.AddNewAccountButton.Size = new System.Drawing.Size(219, 44);
+            this.AddNewAccountButton.TabIndex = 15;
+            this.AddNewAccountButton.Text = "Добави нова сметка";
+            this.AddNewAccountButton.UseVisualStyleBackColor = true;
+            this.AddNewAccountButton.Visible = false;
+            this.AddNewAccountButton.Click += new System.EventHandler(this.AddNewAccountButton_Click);
+            // 
+            // AddNewAccountPanel
+            // 
+            this.AddNewAccountPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.AddNewAccountPanel.Controls.Add(this.StatusAccountComboBox);
+            this.AddNewAccountPanel.Controls.Add(this.CurrencyAccountLabel);
+            this.AddNewAccountPanel.Controls.Add(this.CurrencyAccoutComboBox);
+            this.AddNewAccountPanel.Controls.Add(this.StatusAccountLabel);
+            this.AddNewAccountPanel.Controls.Add(this.CancelAccountButton);
+            this.AddNewAccountPanel.Controls.Add(this.AddOrEditAccountButton);
+            this.AddNewAccountPanel.Controls.Add(this.AmountAccountTextBox);
+            this.AddNewAccountPanel.Controls.Add(this.AvailabilityAmountAccountLabel);
+            this.AddNewAccountPanel.Controls.Add(this.InterestAccountLabel);
+            this.AddNewAccountPanel.Controls.Add(this.InterestAccountTextBox);
+            this.AddNewAccountPanel.Controls.Add(this.label9);
+            this.AddNewAccountPanel.Controls.Add(this.TitleAccountlabel);
+            this.AddNewAccountPanel.Controls.Add(this.NumberAccountLabel);
+            this.AddNewAccountPanel.Controls.Add(this.NumberAccountTextBox);
+            this.AddNewAccountPanel.Location = new System.Drawing.Point(124, 40);
+            this.AddNewAccountPanel.Name = "AddNewAccountPanel";
+            this.AddNewAccountPanel.Size = new System.Drawing.Size(805, 431);
+            this.AddNewAccountPanel.TabIndex = 8;
+            this.AddNewAccountPanel.Visible = false;
+            // 
+            // CancelAccountButton
+            // 
+            this.CancelAccountButton.Location = new System.Drawing.Point(413, 340);
+            this.CancelAccountButton.Name = "CancelAccountButton";
+            this.CancelAccountButton.Size = new System.Drawing.Size(178, 36);
+            this.CancelAccountButton.TabIndex = 5;
+            this.CancelAccountButton.Text = "Отказ";
+            this.CancelAccountButton.UseVisualStyleBackColor = true;
+            this.CancelAccountButton.Click += new System.EventHandler(this.CancelAccountButton_Click);
+            // 
+            // AddOrEditAccountButton
+            // 
+            this.AddOrEditAccountButton.Location = new System.Drawing.Point(202, 340);
+            this.AddOrEditAccountButton.Name = "AddOrEditAccountButton";
+            this.AddOrEditAccountButton.Size = new System.Drawing.Size(178, 36);
+            this.AddOrEditAccountButton.TabIndex = 4;
+            this.AddOrEditAccountButton.Text = "Добави акаунт";
+            this.AddOrEditAccountButton.UseVisualStyleBackColor = true;
+            this.AddOrEditAccountButton.Click += new System.EventHandler(this.AddOrEditAccountButton_Click);
+            // 
+            // StatusAccountLabel
+            // 
+            this.StatusAccountLabel.AutoSize = true;
+            this.StatusAccountLabel.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.StatusAccountLabel.Location = new System.Drawing.Point(409, 231);
+            this.StatusAccountLabel.Name = "StatusAccountLabel";
+            this.StatusAccountLabel.Size = new System.Drawing.Size(92, 21);
+            this.StatusAccountLabel.TabIndex = 9;
+            this.StatusAccountLabel.Text = "Тип акаунт:";
+            // 
+            // CurrencyAccoutComboBox
+            // 
+            this.CurrencyAccoutComboBox.FormattingEnabled = true;
+            this.CurrencyAccoutComboBox.Items.AddRange(new object[] {
+            "BGN",
+            "USD",
+            "EUR",
+            "RUB",
+            "GBP"});
+            this.CurrencyAccoutComboBox.Location = new System.Drawing.Point(413, 172);
+            this.CurrencyAccoutComboBox.Name = "CurrencyAccoutComboBox";
+            this.CurrencyAccoutComboBox.Size = new System.Drawing.Size(194, 24);
+            this.CurrencyAccoutComboBox.TabIndex = 9;
+            this.CurrencyAccoutComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.CurrencyAccoutComboBox_Validating);
+            // 
+            // AvailabilityAmountAccountLabel
+            // 
+            this.AvailabilityAmountAccountLabel.AutoSize = true;
+            this.AvailabilityAmountAccountLabel.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AvailabilityAmountAccountLabel.Location = new System.Drawing.Point(178, 224);
+            this.AvailabilityAmountAccountLabel.Name = "AvailabilityAmountAccountLabel";
+            this.AvailabilityAmountAccountLabel.Size = new System.Drawing.Size(92, 21);
+            this.AvailabilityAmountAccountLabel.TabIndex = 10;
+            this.AvailabilityAmountAccountLabel.Text = "Наличност:";
+            // 
+            // InterestAccountLabel
+            // 
+            this.InterestAccountLabel.AutoSize = true;
+            this.InterestAccountLabel.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.InterestAccountLabel.Location = new System.Drawing.Point(178, 144);
+            this.InterestAccountLabel.Name = "InterestAccountLabel";
+            this.InterestAccountLabel.Size = new System.Drawing.Size(57, 21);
+            this.InterestAccountLabel.TabIndex = 9;
+            this.InterestAccountLabel.Text = "Лихва:";
+            // 
+            // AmountAccountTextBox
+            // 
+            this.AmountAccountTextBox.Font = new System.Drawing.Font("Calibri", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AmountAccountTextBox.Location = new System.Drawing.Point(182, 251);
+            this.AmountAccountTextBox.Name = "AmountAccountTextBox";
+            this.AmountAccountTextBox.Size = new System.Drawing.Size(198, 29);
+            this.AmountAccountTextBox.TabIndex = 4;
+            this.AmountAccountTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.AmountAccountTextBox_Validating);
+            // 
+            // InterestAccountTextBox
+            // 
+            this.InterestAccountTextBox.Font = new System.Drawing.Font("Calibri", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InterestAccountTextBox.Location = new System.Drawing.Point(182, 168);
+            this.InterestAccountTextBox.Name = "InterestAccountTextBox";
+            this.InterestAccountTextBox.Size = new System.Drawing.Size(198, 29);
+            this.InterestAccountTextBox.TabIndex = 3;
+            this.InterestAccountTextBox.TextChanged += new System.EventHandler(this.InterestAccountTextBox_TextChanged);
+            this.InterestAccountTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.InterestAccountTextBox_Validating);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(252, 21);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(0, 37);
+            this.label9.TabIndex = 0;
+            // 
+            // TitleAccountlabel
+            // 
+            this.TitleAccountlabel.AutoSize = true;
+            this.TitleAccountlabel.Font = new System.Drawing.Font("Calibri", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TitleAccountlabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.TitleAccountlabel.Location = new System.Drawing.Point(365, 6);
+            this.TitleAccountlabel.Name = "TitleAccountlabel";
+            this.TitleAccountlabel.Size = new System.Drawing.Size(89, 35);
+            this.TitleAccountlabel.TabIndex = 7;
+            this.TitleAccountlabel.Text = "Label2";
+            // 
+            // NumberAccountTextBox
+            // 
+            this.NumberAccountTextBox.Font = new System.Drawing.Font("Calibri", 10.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NumberAccountTextBox.Location = new System.Drawing.Point(182, 84);
+            this.NumberAccountTextBox.Name = "NumberAccountTextBox";
+            this.NumberAccountTextBox.Size = new System.Drawing.Size(425, 29);
+            this.NumberAccountTextBox.TabIndex = 1;
+            this.NumberAccountTextBox.TextChanged += new System.EventHandler(this.NumberAccountTextBox_TextChanged);
+            this.NumberAccountTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.NumberAccountTextBox_Validating);
+            // 
+            // NumberAccountLabel
+            // 
+            this.NumberAccountLabel.AutoSize = true;
+            this.NumberAccountLabel.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.NumberAccountLabel.Location = new System.Drawing.Point(178, 58);
+            this.NumberAccountLabel.Name = "NumberAccountLabel";
+            this.NumberAccountLabel.Size = new System.Drawing.Size(139, 21);
+            this.NumberAccountLabel.TabIndex = 6;
+            this.NumberAccountLabel.Text = "Номер на сметка:";
+            // 
+            // CurrencyAccountLabel
+            // 
+            this.CurrencyAccountLabel.AutoSize = true;
+            this.CurrencyAccountLabel.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CurrencyAccountLabel.Location = new System.Drawing.Point(413, 145);
+            this.CurrencyAccountLabel.Name = "CurrencyAccountLabel";
+            this.CurrencyAccountLabel.Size = new System.Drawing.Size(64, 21);
+            this.CurrencyAccountLabel.TabIndex = 11;
+            this.CurrencyAccountLabel.Text = "Валута:";
+            // 
+            // StatusAccountComboBox
+            // 
+            this.StatusAccountComboBox.FormattingEnabled = true;
+            this.StatusAccountComboBox.Items.AddRange(new object[] {
+            "Active",
+            "Inactive",
+            "Dormant",
+            "Closed"});
+            this.StatusAccountComboBox.Location = new System.Drawing.Point(413, 256);
+            this.StatusAccountComboBox.Name = "StatusAccountComboBox";
+            this.StatusAccountComboBox.Size = new System.Drawing.Size(194, 24);
+            this.StatusAccountComboBox.TabIndex = 12;
+            this.StatusAccountComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.StatusAccountComboBox_Validating);
             // 
             // EmployeeMainManu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1169, 592);
+            this.ClientSize = new System.Drawing.Size(1178, 625);
             this.Controls.Add(this.FindClientPanel);
             this.Controls.Add(this.menuStripAdmin);
             this.Controls.Add(this.AddNewClientPanel);
             this.Name = "EmployeeMainManu";
             this.Text = "Служител";
-            this.Load += new System.EventHandler(this.ClientMainManu_Load);
             this.AddNewClientPanel.ResumeLayout(false);
             this.AddNewClientPanel.PerformLayout();
             this.ProfileDataClientAdd.ResumeLayout(false);
@@ -632,6 +856,9 @@
             this.FinedClientGroupBox.PerformLayout();
             this.menuStripAdmin.ResumeLayout(false);
             this.menuStripAdmin.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.AddNewAccountPanel.ResumeLayout(false);
+            this.AddNewAccountPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -671,7 +898,7 @@
         private System.Windows.Forms.TextBox EGNClientAddTextBox;
         private System.Windows.Forms.Label EGNClientLabel;
         private System.Windows.Forms.MenuStrip menuStripAdmin;
-        private System.Windows.Forms.ToolStripMenuItem AddNewClienrMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AddNewClientMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FindClientMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitProfileMenuItem;
         private System.Windows.Forms.GroupBox FinedClientGroupBox;
@@ -688,5 +915,22 @@
         private System.Windows.Forms.Button DeleteClienButton;
         private System.Windows.Forms.Button EditClientButton;
         private System.Windows.Forms.Label FinedClientNameDataLabel;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button AddNewAccountButton;
+        private System.Windows.Forms.Panel AddNewAccountPanel;
+        private System.Windows.Forms.Button CancelAccountButton;
+        private System.Windows.Forms.Button AddOrEditAccountButton;
+        private System.Windows.Forms.Label StatusAccountLabel;
+        private System.Windows.Forms.ComboBox CurrencyAccoutComboBox;
+        private System.Windows.Forms.Label AvailabilityAmountAccountLabel;
+        private System.Windows.Forms.Label InterestAccountLabel;
+        private System.Windows.Forms.TextBox AmountAccountTextBox;
+        private System.Windows.Forms.TextBox InterestAccountTextBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label TitleAccountlabel;
+        private System.Windows.Forms.Label CurrencyAccountLabel;
+        private System.Windows.Forms.Label NumberAccountLabel;
+        private System.Windows.Forms.TextBox NumberAccountTextBox;
+        private System.Windows.Forms.ComboBox StatusAccountComboBox;
     }
 }
